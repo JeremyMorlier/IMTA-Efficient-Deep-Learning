@@ -18,7 +18,7 @@ from torchinfo import summary
 
 # Import Networks
 #from networks.resnet import ResNet18
-from networks.densenet import DenseNet121, DenseNet169, DenseNet121_2, DenseNet121_3 
+from networks.densenet import DenseNet121_Dropout_Cifar2
 
 from tools.training import train, save, run_epoch, calibrate, run_epoch_half_precision
 from tools.pytorch_helper import print_size_of_model
@@ -41,7 +41,7 @@ batchSizeTest = 500
 
 
 # Expérience 3
-experiment_Name = "DenseNet_Data_Augmentation2"
+experiment_Name = "DenseNet_Cifar_Data_Augmentation2"
 description = "DensetNet 121 on CIFAR10,  RandomCrop(32, padding=4) RandomHorizontalFlip(), with Cross Entropy Loss, SGD (lr=0.1), lr_scheduler.MultiStepLR(optimizer, milestones=[100, 200], gamma=0.1)"
 # Dataset
 transform_train = transforms.Compose(
@@ -68,7 +68,7 @@ test_loader = torch.utils.data.DataLoader(
         batch_size=batchSizeTest,
         shuffle=False, num_workers=4)
 # Network
-model = DenseNet121()
+model = DenseNet121_Dropout_Cifar2()
 model = model.to(device=device)
 
 # Training Parameters
@@ -81,4 +81,4 @@ scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[100, 200
 results = train(n_epochs, model, train_loader, test_loader, batchSizeTrain, batchSizeTest, criterion, optimizer, device, scheduler)
 
 # sauvegarde des résultats
-save(experiment_Name, description, resultsPath, results, model, DenseNet121())
+save(experiment_Name, description, resultsPath, results, model, DenseNet121_Dropout_Cifar2())
